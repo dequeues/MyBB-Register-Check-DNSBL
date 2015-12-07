@@ -62,7 +62,7 @@ function reverseIP($ip)
 
 function is_in_dnsbl($ip)
 {
-	$dnsbl_list = array("rbl.efnetrbl.org", "xbl.spamhaus.org");
+	$dnsbl_list = array("rbl.efnetrbl.org", "xbl.spamhaus.org", "tor.dnsbl.sectoor.de");
 	$reverseIP = reverseIP($ip);
 
 	foreach ($dnsbl_list as $dnsbl)
