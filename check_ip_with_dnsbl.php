@@ -1,5 +1,12 @@
 <?php
 
+
+if(!defined("IN_MYBB"))
+{
+    die("Direct initialization of this file is not allowed.");
+}
+
+
 function check_ip_with_dnsbl_info()
 {
 	return array(
