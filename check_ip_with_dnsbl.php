@@ -51,7 +51,7 @@ function check_ip()
 	{
 		global $lang;
 		require_once(MYBB_ROOT . "/inc/functions.php");
-		error($lang->sprintf($lang->error_stop_forum_spam_spammer, $realIP));
+		error($lang->sprintf($lang->error_stop_forum_spam_spammer, "IP"));
 	}
 }
 
