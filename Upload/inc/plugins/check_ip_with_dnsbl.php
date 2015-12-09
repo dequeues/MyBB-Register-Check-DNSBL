@@ -49,7 +49,7 @@ function check_ip_with_dnsbl_activate()
 			"value" => 1
 		),
 		"checkipwithdnsbl_dnsbllist" => array (
-			"title" => "Default DNSBLs",
+			"title" => "DNSBL list",
 			"description" => "A list of the DNSBLs to check IP addresses against before completing registration (one per line)",
 			"optionscode" => "textarea",
 			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ndnsbl.dronebl.org"
