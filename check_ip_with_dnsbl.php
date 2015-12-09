@@ -1,6 +1,5 @@
 <?php
 
-
 if(!defined("IN_MYBB"))
 {
     die("Direct initialization of this file is not allowed.");
@@ -22,12 +21,60 @@ function check_ip_with_dnsbl_info()
 
 function check_ip_with_dnsbl_activate()
 {
+	global $db;
 
+	$number_groups_query = $db->simple_select("settinggroups", "COUNT(*) AS num_groups");
+	$number_groups = (int)$db->fetch_field($number_groups_query, "num_groups");
+
+	$setting_group = array (
+		"name" => "checkipwithdnsbl",
+		"title" => "Check IP with DNSBL(s)",
+		"description" => "Check IP with DNSBL(s) on registration",
+		"disporder" => ((int)$number_groups + 1),
+		"isdefault" => 0
+	);
+	$gid = $db->insert_query("settinggroups", $setting_group);
+
+	$settings = array (
+		"checkipwithdnsbl_enabled" => array (
+			"title" => "Enabled?",
+			"description" => "Check IP addresses on registration against enabled DNSBL(s)?",
+			"optionscode" => "onoff",
+			"value" => 1
+		)
+	);
+
+	$disporder = 1;
+	foreach ($settings as $name => $setting)
+	{
+		$setting["name"] = $name;
+		$setting["gid"] = $gid;
+		$setting["disporder"] = $disporder;
+		$db->insert_query("settings", $setting);
+		$disporder++;
+	}
+
+	rebuild_settings();
 }
 
 function check_ip_with_dnsbl_deactivate()
 {
+	global $db;
 
+	$db->delete_query("settinggroups", "name = 'checkipwithdnsbl'");
+	$db->delete_query("settings", "name LIKE ('checkipwithdnsbl_%')");
+
+	rebuild_settings();
+}
+
+function check_ip_with_dnsbl_is_activated()
+{
+	global $mybb;
+	if ($mybb->settings['checkipwithdnsbl_enabled'] == "1")
+	{
+		return true;
+	}
+	return false;
 }
 
 function getRealIP()
@@ -46,6 +93,11 @@ function getRealIP()
 
 function check_ip()
 {
+	if (!check_ip_with_dnsbl_is_activated())
+	{
+		return;
+	}
+
 	$realIP = getRealIP();
 	if (is_in_dnsbl($realIP))
 	{
