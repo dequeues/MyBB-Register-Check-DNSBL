@@ -85,7 +85,6 @@ function check_ip_with_dnsbl_is_activated()
 
 function getRealIP()
 {
-	return "121.40.64.83";
 	if (!empty($_SERVER['HTTP_X_REAL_IP']))
 	{
 		return $_SERVER['HTTP_X_REAL_IP'];
@@ -132,7 +131,6 @@ function check_ip()
 	}
 }
 
-check_ip();
 function reverseIP($ip)
 {
 	return implode('.', array_reverse(explode('.', $ip)));
