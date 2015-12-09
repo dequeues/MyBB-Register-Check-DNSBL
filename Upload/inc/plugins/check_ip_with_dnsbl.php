@@ -85,7 +85,7 @@ function check_ip_with_dnsbl_is_activated()
 
 function getRealIP()
 {
-	$dev = false;
+	return "121.40.64.83";
 	if (!empty($_SERVER['HTTP_X_REAL_IP']))
 	{
 		return $_SERVER['HTTP_X_REAL_IP'];
@@ -100,6 +100,7 @@ function getRealIP()
 function check_ip()
 {
 	global $mybb;
+
 	if (!check_ip_with_dnsbl_is_activated())
 	{
 		return;
@@ -107,14 +108,31 @@ function check_ip()
 
 	$realIP = getRealIP();
 
-	if (is_in_dnsbl($realIP))
+	$is_listed = is_in_dnsbl($realIP);
+
+	if (!$is_listed)
 	{
-		global $lang;
-		require_once(MYBB_ROOT . "/inc/functions.php");
+		return;
+	}
+
+	$lang_var = str_replace(".", "_", $is_listed);
+
+	global $lang;
+	$lang->load("check_ip_with_dnsbl");
+	require_once(MYBB_ROOT . "/inc/functions.php");
+
+	if (isset($lang->{$lang_var}))
+	{
+		error($lang->sprintf($lang->{$lang_var}, $realIP));
+	}
+	else
+	{
+		$lang->load("member");
 		error($lang->sprintf($lang->error_stop_forum_spam_spammer, "IP"));
 	}
 }
 
+check_ip();
 function reverseIP($ip)
 {
 	return implode('.', array_reverse(explode('.', $ip)));
@@ -132,7 +150,7 @@ function is_in_dnsbl($ip)
 	{
 		if(checkdnsrr($reverseIP . "." . $dnsbl. ".", 'A'))
 		{
-			return true;
+			return $dnsbl;
 		}
 	}
 	return false;
