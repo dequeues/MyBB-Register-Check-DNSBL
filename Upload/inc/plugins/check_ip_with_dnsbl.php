@@ -52,7 +52,7 @@ function check_ip_with_dnsbl_activate()
 			"title" => "Default DNSBLs",
 			"description" => "A list of the DNSBLs to check IP addresses against before completing registration (one per line)",
 			"optionscode" => "textarea",
-			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org"
+			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ndnsbl.dronebl.org"
 		)
 	);
 
