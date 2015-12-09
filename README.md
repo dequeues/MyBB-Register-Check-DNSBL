@@ -1,5 +1,5 @@
 # Check IP with DNSBLs
-This is somewhat the same as StopForumSpam, but it checks DNSBLs instead.
+This is somewhat the same as StopForumSpam, but it checks DNSBLs instead. If an IP is in any of the blacklists that you have with this plugin, it will deny their registration.
 
 ### Configuration
 Once you have uploaded the contents of the `Upload` folder, you can go ahead and enable the plugin.  
