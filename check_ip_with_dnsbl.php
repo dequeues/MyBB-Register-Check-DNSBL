@@ -41,6 +41,12 @@ function check_ip_with_dnsbl_activate()
 			"description" => "Check IP addresses on registration against enabled DNSBL(s)?",
 			"optionscode" => "onoff",
 			"value" => 1
+		),
+		"checkipwithdnsbl_dnsbllist" => array (
+			"title" => "Default DNSBLs",
+			"description" => "A list of the DNSBLs to check IP addresses against before completing registration (one per line)",
+			"optionscode" => "textarea",
+			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ntor.dnsbl.sectoor.de"
 		)
 	);
 
@@ -93,12 +99,14 @@ function getRealIP()
 
 function check_ip()
 {
+	global $mybb;
 	if (!check_ip_with_dnsbl_is_activated())
 	{
 		return;
 	}
 
 	$realIP = getRealIP();
+
 	if (is_in_dnsbl($realIP))
 	{
 		global $lang;
@@ -114,7 +122,10 @@ function reverseIP($ip)
 
 function is_in_dnsbl($ip)
 {
-	$dnsbl_list = array("rbl.efnetrbl.org", "xbl.spamhaus.org", "tor.dnsbl.sectoor.de");
+	global $mybb;
+
+	$dnsbl_list = explode("\n", $mybb->settings['checkipwithdnsbl_dnsbllist']);
+
 	$reverseIP = reverseIP($ip);
 
 	foreach ($dnsbl_list as $dnsbl)
