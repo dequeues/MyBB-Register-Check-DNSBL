@@ -42,11 +42,17 @@ function check_ip_with_dnsbl_activate()
 			"optionscode" => "onoff",
 			"value" => 1
 		),
+		"checkipwithdnsbl_allowtor" => array (
+			"title" => "Allow Tor users?",
+			"description" => "Allow people to register connecting through Tor? For more information on Tor, visit <a href=\"https://www.torproject.org/\">Tor Project</a>",
+			"optionscode" => "yesno",
+			"value" => 1
+		),
 		"checkipwithdnsbl_dnsbllist" => array (
 			"title" => "Default DNSBLs",
 			"description" => "A list of the DNSBLs to check IP addresses against before completing registration (one per line)",
 			"optionscode" => "textarea",
-			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ntor.dnsbl.sectoor.de"
+			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org"
 		)
 	);
 
@@ -151,6 +157,15 @@ function is_in_dnsbl($ip)
 			return $dnsbl;
 		}
 	}
+
+	if ($mybb->settings['checkipwithdnsbl_allowtor'] == "0")
+	{
+		if (checkdnsrr($reverseIP . ".tor.dnsbl.sectoor.de.", 'A'))
+		{
+			return "tor.dnsbl.sectoor.de";
+		}
+	}
+
 	return false;
 }
 
