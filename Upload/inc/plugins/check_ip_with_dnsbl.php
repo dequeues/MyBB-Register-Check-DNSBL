@@ -14,7 +14,7 @@ function check_ip_with_dnsbl_info()
 		"website" => "http://github.com/dequeues",
 		"author" => "Nathan (dequeues)",
 		"guid" => "",
-		"version" => "1.0",
+		"version" => "2.0",
 		"compatibility" => "18*"
 	);
 }
