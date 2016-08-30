@@ -52,7 +52,7 @@ function check_ip_with_dnsbl_activate()
 			"title" => "DNSBL list",
 			"description" => "A list of the DNSBLs to check IP addresses against before completing registration (one per line)",
 			"optionscode" => "textarea",
-			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ndnsbl.dronebl.org"
+			"value" => "rbl.efnetrbl.org\nxbl.spamhaus.org\ndnsbl.dronebl.org\nb.barracudacentral.org"
 		)
 	);
 
@@ -152,7 +152,7 @@ function is_in_dnsbl($ip)
 
 	foreach ($dnsbl_list as $dnsbl)
 	{
-		if(checkdnsrr($reverseIP . "." . $dnsbl. ".", 'A'))
+		if(checkdnsrr("{$reverseIP}.{$dnsbl}.", 'A'))
 		{
 			return $dnsbl;
 		}
@@ -160,7 +160,7 @@ function is_in_dnsbl($ip)
 
 	if ($mybb->settings['checkipwithdnsbl_allowtor'] == "0")
 	{
-		if (checkdnsrr($reverseIP . ".tor.dnsbl.sectoor.de.", 'A'))
+		if (checkdnsrr("{$reverseIP}.tor.dnsbl.sectoor.de.", 'A'))
 		{
 			return "tor.dnsbl.sectoor.de";
 		}
@@ -170,4 +170,3 @@ function is_in_dnsbl($ip)
 }
 
 $plugins->add_hook("member_do_register_start", "check_ip");
-
