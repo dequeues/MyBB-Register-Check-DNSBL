@@ -19,9 +19,17 @@ function check_ip_with_dnsbl_info()
 	);
 }
 
-function check_ip_with_dnsbl_activate()
+function check_ip_with_dnsbl_install()
 {
 	global $db;
+
+  $collation = $db->build_create_table_collation();
+
+  $db->write_query("CREATE TABLE `". TABLE_PREFIX . "denied_by_dnsbl` (
+    `id` int(11) NOT NULL,
+    `ip_address` varbinary(16) NOT NULL,
+    `denied_by` varchar(20) NOT NULL
+  ) ENGINE=InnoDB{$collation}");
 
 	$number_groups_query = $db->simple_select("settinggroups", "COUNT(*) AS num_groups");
 	$number_groups = (int)$db->fetch_field($number_groups_query, "num_groups");
@@ -69,14 +77,40 @@ function check_ip_with_dnsbl_activate()
 	rebuild_settings();
 }
 
+function check_ip_with_dnsbl_activate()
+{
+  global $db;
+
+  $db->update_query("settings", array("value" => 1), "name='checkipwithdnsbl_enabled'");
+
+  rebuild_settings();
+}
+
 function check_ip_with_dnsbl_deactivate()
+{
+  global $db;
+
+  $db->update_query("settings", array("value" => 0), "name='checkipwithdnsbl_enabled'");
+
+  rebuild_settings();
+}
+
+function check_ip_with_dnsbl_uninstall()
 {
 	global $db;
 
 	$db->delete_query("settinggroups", "name = 'checkipwithdnsbl'");
 	$db->delete_query("settings", "name LIKE ('checkipwithdnsbl_%')");
+  $db->drop_table("denied_by_dnsbl");
 
 	rebuild_settings();
+}
+
+function check_ip_with_dnsbl_is_installed()
+{
+  global $db;
+
+  return $db->table_exists("denied_by_dnsbl");
 }
 
 function check_ip_with_dnsbl_is_activated()
@@ -170,3 +204,27 @@ function is_in_dnsbl($ip)
 }
 
 $plugins->add_hook("member_do_register_start", "check_ip");
+
+function add_tools_menu_item(&$menu)
+{
+  $menu_to_insert = array("id" => "denied_by_dnsbl", "title" => "Denied By DNSBL", "link" => "index.php?module=tools-denied_by_dnsbl");
+
+  foreach ($menu as $key => $item)
+  {
+    if ($item['id'] == "statistics")
+    {
+      $statistics_old_id = $key;
+      $menu[(int)$key+10] = $item;
+    }
+  }
+
+  if (isset($statistics_old_id))
+  {
+    $menu[$statistics_old_id] = $menu_to_insert;
+  }
+  else
+  {
+    $menu[(int)end(array_keys($menu))+10] = $menu_to_insert;
+  }
+}
+$plugins->add_hook("admin_tools_menu_logs", "add_tools_menu_item");
