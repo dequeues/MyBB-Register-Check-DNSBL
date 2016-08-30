@@ -12,7 +12,7 @@ function check_ip_with_dnsbl_info()
 		"name" => "Check IP with DNSBLs",
 		"description" => "Check IP upon registration in DNSBLs",
 		"website" => "http://github.com/dequeues",
-		"author" => "Nathan (dequeues)",
+		"author" => "<a href=\"http://github.com/dequeues\">Nathan (dequeues)>/a>",
 		"guid" => "",
 		"version" => "2.0",
 		"compatibility" => "18*"
@@ -28,7 +28,7 @@ function check_ip_with_dnsbl_activate()
 
 	$setting_group = array (
 		"name" => "checkipwithdnsbl",
-		"title" => "Check IP with DNSBL(s)",
+		"title" => "Check IP with DNSBLs",
 		"description" => "Check IP with DNSBL(s) on registration",
 		"disporder" => ((int)$number_groups + 1),
 		"isdefault" => 0
