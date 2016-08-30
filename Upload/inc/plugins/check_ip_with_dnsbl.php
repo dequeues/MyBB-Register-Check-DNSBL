@@ -12,7 +12,7 @@ function check_ip_with_dnsbl_info()
 		"name" => "Check IP with DNSBLs",
 		"description" => "Check IP upon registration in DNSBLs",
 		"website" => "http://github.com/dequeues",
-		"author" => "<a href=\"http://github.com/dequeues\">Nathan (dequeues)>/a>",
+		"author" => "<a href=\"http://github.com/dequeues\">Nathan (dequeues)</a>",
 		"guid" => "",
 		"version" => "2.0",
 		"compatibility" => "18*"
